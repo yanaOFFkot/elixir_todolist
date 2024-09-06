@@ -1,0 +1,34 @@
+<.simple_form :let={f} for={@changeset} action={@action}>
+  <.error :if={@changeset.action}>
+    Oops, something went wrong! Please check the errors below.
+  </.error>
+  <.input field={f[:title]} type="text" label="Title" />
+  <.error :if={f.errors[:title]}>
+    <%= f.errors[:title] |> Enum.map(&elem(&1, 1)) |> Enum.join(", ") %>
+  </.error>
+
+  <.input field={f[:description]} type="text" label="Description" />
+  <.error :if={f.errors[:description]}>
+    <%= f.errors[:description] |> Enum.map(&elem(&1, 1)) |> Enum.join(", ") %>
+  </.error>
+
+  <.input 
+    field={f[:status]} 
+    type="select" 
+    label="Status" 
+    options={[
+      {"Not Started", "Not Started"}, 
+      {"In Progress", "In Progress"}, 
+      {"Completed", "Completed"}, 
+      {"On Hold", "On Hold"}, 
+      {"Cancelled", "Cancelled"}
+    ]}
+  />
+  <.error :if={f.errors[:status]}>
+    <%= f.errors[:status] |> Enum.map(&elem(&1, 1)) |> Enum.join(", ") %>
+  </.error>
+
+  <:actions>
+    <.button>Save Task</.button>
+  </:actions>
+</.simple_form>

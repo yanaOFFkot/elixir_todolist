@@ -1,0 +1,67 @@
+<header class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg">
+  <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <a href="/" class="text-2xl font-bold">TodoList</a>
+    </div>
+    <%= if @current_user do %>
+      <nav class="flex items-center space-x-6">
+        <a href={~p"/tasks"} class="hover:text-indigo-200 transition duration-150 ease-in-out">
+          My Tasks
+        </a>
+        <div class="relative">
+          <div class="flex items-center space-x-3 cursor-pointer" onclick="toggleDropdown()" id="dropdown-button">
+            <img src={@current_user.picture} alt="User Profile Picture" class="w-10 h-10 rounded-full border-2 border-white" id="user-picture" />
+            <span id="user-name" class="font-medium">
+              <%= @current_user.name %>
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden" id="dropdown-menu">
+            <a href={~p"/profile"} class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white">
+              Profile
+            </a>
+            <a href={~p"/logout"} class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white">
+              Log Out
+            </a>
+          </div>
+        </div>
+      </nav>
+    <% end %>
+  </div>
+</header>
+
+<main class="bg-gray-100 min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+  <div class="container mx-auto max-w-4xl bg-white rounded-lg shadow-md p-6">
+    <.flash_group flash={@flash} />
+    <%= @inner_content %>
+  </div>
+</main>
+
+<script>
+function toggleDropdown() {
+  const dropdownMenu = document.getElementById("dropdown-menu");
+  dropdownMenu.classList.toggle("hidden");
+}
+
+document.addEventListener("click", function(event) {
+  const dropdownMenu = document.getElementById("dropdown-menu");
+  const dropdownButton = document.getElementById("dropdown-button");
+  
+  if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+    dropdownMenu.classList.add("hidden");
+  }
+});
+
+window.addEventListener("phx:user_updated", (event) => {
+  const userNameElement = document.getElementById("user-name");
+  const userPictureElement = document.getElementById("user-picture");
+  if (userNameElement && event.detail.name) {
+    userNameElement.textContent = event.detail.name;
+  }
+  if (userPictureElement && event.detail.picture) {
+    userPictureElement.src = event.detail.picture;
+  }
+});
+</script>
