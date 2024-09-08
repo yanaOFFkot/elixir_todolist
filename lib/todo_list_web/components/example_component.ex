@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Components.ExampleComponent do
+defmodule TodoListWeb.Components.ExampleComponent do
   use Surface.Component
 
   slot default, required: true

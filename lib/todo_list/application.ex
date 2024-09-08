@@ -1,6 +1,4 @@
 defmodule TodoList.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
@@ -12,10 +10,10 @@ defmodule TodoList.Application do
       TodoList.Repo,
       {DNSCluster, query: Application.get_env(:todo_list, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TodoList.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: TodoList.Finch},
-      # Start a worker by calling: TodoList.Worker.start_link(arg)
-      # {TodoList.Worker, arg},
+      {Finch, name: TodoListFinch},
+      # Start the CryptoWorker
+      TodoList.CryptoCache,
+      TodoListWeb.CryptoWorker,
       # Start to serve requests, typically the last entry
       TodoListWeb.Endpoint
     ]

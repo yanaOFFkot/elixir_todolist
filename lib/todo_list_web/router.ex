@@ -20,6 +20,8 @@ defmodule TodoListWeb.Router do
 
     resources "/tasks", TaskController
     live "/profile", UserProfileLive, :index
+    live "/example", ExampleLive, :index
+    live "/task-categories", TaskCategoriesLive, :index
   end
 
 end

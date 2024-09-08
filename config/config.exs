@@ -23,6 +23,8 @@ config :todo_list, TodoListWeb.Gettext,
 # Configures the mailer
 config :todo_list, TodoList.Mailer, adapter: Swoosh.Adapters.Local
 
+config :todo_list, :finch_name, TodoListFinch
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",

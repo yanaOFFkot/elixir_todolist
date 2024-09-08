@@ -11,6 +11,13 @@
   <:col :let={task} label="Title"><%= task.title %></:col>
   <:col :let={task} label="Description"><%= task.description %></:col>
   <:col :let={task} label="Status"><%= task.status %></:col>
+  <:col :let={task} label="Category">
+    <%= if task.category do %>
+      <%= task.category.name %>
+    <% else %>
+      No category
+    <% end %>
+  </:col>
   <:action :let={task}>
     <div class="sr-only">
       <.link navigate={~p"/tasks/#{task}"}>Show</.link>

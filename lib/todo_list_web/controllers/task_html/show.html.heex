@@ -12,6 +12,13 @@
   <:item title="Title"><%= @task.title %></:item>
   <:item title="Description"><%= @task.description %></:item>
   <:item title="Status"><%= @task.status %></:item>
+  <:item title="Category">
+    <%= if @task.category do %>
+      <%= @task.category.name %>
+    <% else %>
+      No category
+    <% end %>
+  </:item>
 </.list>
 
 <.back navigate={~p"/tasks"}>Back to tasks</.back>

@@ -10,6 +10,7 @@ defmodule TodoList.Accounts.User do
     field :picture, :string
 
     has_many :tasks, TodoList.Todos.Task
+    has_many :categories, TodoList.Todos.Category
 
     timestamps()
   end

@@ -21,8 +21,17 @@ defmodule TodoListWeb.TaskController do
   end
 
   def new(conn, _params) do
-    changeset = Todos.change_task(%Task{})
-    render(conn, :new, changeset: changeset)
+    user = conn.assigns[:current_user]
+
+    if user do
+      changeset = Todos.change_task(%Task{})
+      categories = Todos.list_categories_for_user(user.id)
+      render(conn, :new, changeset: changeset, categories: categories, action: ~p"/tasks")
+    else
+      conn
+      |> put_flash(:error, "You must be logged in to create tasks.")
+      |> redirect(to: ~p"/")
+    end
   end
 
   def create(conn, %{"task" => task_params}) do
@@ -38,7 +47,8 @@ defmodule TodoListWeb.TaskController do
           |> redirect(to: ~p"/tasks/#{task.id}")
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          render(conn, :new, changeset: changeset)
+          categories = Todos.list_categories_for_user(user.id)
+          render(conn, :new, changeset: changeset, categories: categories, action: ~p"/tasks")
       end
     else
       conn
@@ -47,6 +57,7 @@ defmodule TodoListWeb.TaskController do
     end
   end
 
+
   def show(conn, %{"id" => id}) do
     task = Todos.get_task!(id)
     render(conn, :show, task: task)
@@ -54,8 +65,9 @@ defmodule TodoListWeb.TaskController do
 
   def edit(conn, %{"id" => id}) do
     task = Todos.get_task!(id)
+    categories = Todos.list_categories_for_user(conn.assigns[:current_user].id) # Загружаем категории для редактирования
     changeset = Todos.change_task(task)
-    render(conn, :edit, task: task, changeset: changeset)
+    render(conn, :edit, task: task, changeset: changeset, categories: categories)
   end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
@@ -68,7 +80,8 @@ defmodule TodoListWeb.TaskController do
         |> redirect(to: ~p"/tasks/#{task}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, :edit, task: task, changeset: changeset)
+        categories = Todos.list_categories_for_user(conn.assigns[:current_user].id)
+        render(conn, :edit, task: task, changeset: changeset, categories: categories)
     end
   end
 

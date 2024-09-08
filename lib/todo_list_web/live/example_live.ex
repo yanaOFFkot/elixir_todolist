@@ -1,7 +1,7 @@
-defmodule MyAppWeb.ExampleLive do
+defmodule TodoListWeb.ExampleLive do
   use Surface.LiveView
 
-  alias MyAppWeb.Components.ExampleComponent
+  alias TodoListWeb.Components.ExampleComponent
 
   def render(assigns) do
     ~F"""
