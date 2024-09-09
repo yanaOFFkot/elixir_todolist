@@ -20,11 +20,11 @@ defmodule TodoListWeb.CryptoRateComponent do
   def handle_info(:load_initial_rate, socket) do
     case CryptoCache.get_rate() do
       {nil, _} ->
-        send(TodoListWeb.CryptoWorker, :work)
+        TodoListWeb.CryptoWorker.fetch_rate()
         {:noreply, socket}
       {rate, last_updated} ->
         if DateTime.diff(DateTime.utc_now(), last_updated, :second) > 300 do
-          send(TodoListWeb.CryptoWorker, :work)
+          TodoListWeb.CryptoWorker.fetch_rate()
         end
         {:noreply, assign(socket, crypto_rate: to_string(rate), last_updated: format_datetime(last_updated))}
     end
